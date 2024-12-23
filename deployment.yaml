@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appointment-scheduling-service
+  labels:
+    app: appointment-scheduling-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appointment-scheduling-service
+  template:
+    metadata:
+      labels:
+        app: appointment-scheduling-service
+    spec:
+      containers:
+        - name: appointment-scheduling-service
+          image: gcr.io/infra-odyssey-445416-h1/appointment-scheduling-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /api/appointment-scheduling-service/health
+            initialDelaySeconds: 40
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /api/appointment-scheduling-service/health
+            initialDelaySeconds: 40
+            periodSeconds: 10
