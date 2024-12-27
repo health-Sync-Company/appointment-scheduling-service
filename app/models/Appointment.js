@@ -11,11 +11,11 @@ const AppointmentSchema = new mongoose.Schema({
     },
     doctorName: {
         type: String,
-        required: [true, "Name is required"],
+        required: [true, "Doctor name is required"],
     },
     patientName: {
         type: String,
-        required: [true, "Name is required"],
+        required: [true, "Patient name is required"],
     },
     date: {
         type: Date,
