@@ -1,34 +1,75 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: appointment-scheduling-service
+  name: appointment-scheduling-service-blue
   labels:
     app: appointment-scheduling-service
+    version: blue
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: appointment-scheduling-service
+      version: blue
   template:
     metadata:
       labels:
         app: appointment-scheduling-service
+        version: blue
     spec:
       containers:
         - name: appointment-scheduling-service
-          image: gcr.io/infra-odyssey-445416-h1/appointment-scheduling-service:prod
+          image: gcr.io/YOUR_PROJECT_ID/appointment-scheduling-service:blue
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           readinessProbe:
             httpGet:
-              port: 8080
               path: /api/appointment-scheduling-service/health
-            initialDelaySeconds: 40
-            periodSeconds: 10
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
           livenessProbe:
             httpGet:
-              port: 8080
               path: /api/appointment-scheduling-service/health
-            initialDelaySeconds: 40
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appointment-scheduling-service-green
+  labels:
+    app: appointment-scheduling-service
+    version: green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: appointment-scheduling-service
+      version: green
+  template:
+    metadata:
+      labels:
+        app: appointment-scheduling-service
+        version: green
+    spec:
+      containers:
+        - name: appointment-scheduling-service
+          image: gcr.io/YOUR_PROJECT_ID/appointment-scheduling-service:green
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /api/appointment-scheduling-service/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/appointment-scheduling-service/health
+              port: 8080
+            initialDelaySeconds: 30
             periodSeconds: 10
